@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask floorLayers;
     public Animator animator;
     public GameObject Sprite;
+    public PlayerAttack playerAttack;
     float lastDirection = 1f; // 1 = right, -1 = left
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -45,9 +46,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+
     public void OnMove(InputValue value)
     {
         moveinput = value.Get<Vector2>();
+        playerAttack.SetFacingDirection(moveinput);
     }
 
     public void OnJump()
