@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     public float Movementspeed;
     public float JumpForce;
     public float groundCheckDistance = 0.5f;
+    public int ExtraJumpsRemaining;
+    public int TotalExtraJumps;
     Rigidbody2D rb;
     Vector3 moveinput;
     public LayerMask floorLayers;
@@ -18,6 +20,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        ExtraJumpsRemaining = TotalExtraJumps;
     }
 
     private void Update()
@@ -36,6 +39,10 @@ public class PlayerController : MonoBehaviour
             float yRotation = lastDirection < 0 ? 180f : 0f;
             Sprite.transform.rotation = Quaternion.Euler(Sprite.transform.rotation.x, yRotation, Sprite.transform.rotation.z);
         }
+        if (isOnGround())
+        {
+            ExtraJumpsRemaining = TotalExtraJumps;
+        }
     }
 
     public void OnMove(InputValue value)
@@ -45,8 +52,9 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump()
     {
-        if (isOnGround())
+        if (ExtraJumpsRemaining > 0)
         {
+            ExtraJumpsRemaining--;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, JumpForce);
             if (animator != null)
                 animator.SetTrigger("JumpTrigger");
