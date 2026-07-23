@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,13 @@ public class PlayerAttack : MonoBehaviour
     public Collider2D attackCollider;
     public float AttackTransitionDuration = 0.2f;
     private Vector2 facingDirection = Vector2.down;
+    public List<string> AttackableTags = new List<string>();
+    public CustomTrigger attackTrigger;
+
+    private void Awake()
+    {
+        attackTrigger.OnTriggerEnter += OnAttackTriggerEnter;
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -51,6 +59,22 @@ public class PlayerAttack : MonoBehaviour
         attackCollider.isTrigger = isAttacking;
     }
 
+    public void OnAttackTriggerEnter(Collider2D collision)
+    {
+        if (isAttacking)
+            foreach (string tag in AttackableTags)
+            {
+                if (collision.CompareTag(tag))
+                {
+                    // Get the EnemyHealth component from the enemy
+                    HealthSystem enemyHealth = collision.GetComponent<HealthSystem>();
+                    if (enemyHealth != null)
+                    {
+                        enemyHealth.TakeDamage(1); // You can adjust the damage value as needed
+                    }
+                }
+            }
+    }
     public void OnAttack(InputValue value)
     {
 
