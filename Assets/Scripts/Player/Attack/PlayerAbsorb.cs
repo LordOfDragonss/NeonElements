@@ -44,7 +44,8 @@ public class PlayerAbsorb : MonoBehaviour
     public void ChangeActiveAbility(AbilityType type)
     {
         ActiveAbility = type;
-        if(type != AbilityType.None)
+        ChangeAppearance();
+        if (type != AbilityType.None)
             hasAbility = true;
         else
             hasAbility = false;
@@ -139,6 +140,49 @@ public class PlayerAbsorb : MonoBehaviour
                 break;
             default:
                 StartCoroutine(AbsorbAction());
+                break;
+        }
+    }
+
+    //temporary Visualization of Active Ability
+    public void ChangeAppearance()
+    {
+        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+        switch (ActiveAbility)
+        {
+            case AbilityType.None:
+                sprite.color = Color.white;
+                break;
+            case AbilityType.Blue:
+                sprite.color = Color.blue;
+                // Implement Blue ability action
+                break;
+            case AbilityType.Red:
+                sprite.color = Color.red;
+                // Implement Red ability action
+                break;
+            case AbilityType.Green:
+                sprite.color = Color.green;
+                // Implement Green ability action
+                break;
+            case AbilityType.Pink:
+                sprite.color = Color.hotPink;
+                // Implement Pink ability action
+                break;
+            case AbilityType.Purple:
+                sprite.color = Color.purple;
+                // Implement Purple ability action
+                break;
+            case AbilityType.Yellow:
+                sprite.color = Color.yellow;
+                // Implement Yellow ability action
+                break;
+            case AbilityType.Orange:
+                sprite.color = Color.orange;
+                // Implement Orange ability action
+                break;
+            default:
+                sprite.color = Color.white;
                 break;
         }
     }
