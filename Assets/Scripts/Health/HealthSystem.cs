@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 
 public class HealthSystem : MonoBehaviour
 {
     public int maxHealth = 6;
     public int currentHealth;
+
+    public Action<int> onHealthValueUpdated;
 
     private void Start()
     {
@@ -19,6 +22,7 @@ public class HealthSystem : MonoBehaviour
         {
             currentHealth = 0;
         }
+        onHealthValueUpdated?.Invoke(currentHealth);
     }
 
     public void RecoverHealth(int amount)
@@ -31,6 +35,6 @@ public class HealthSystem : MonoBehaviour
         {
             currentHealth = maxHealth;
         }
-
+        onHealthValueUpdated?.Invoke(currentHealth);
     }
 }
