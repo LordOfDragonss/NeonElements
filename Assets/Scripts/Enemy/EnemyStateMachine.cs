@@ -2,22 +2,27 @@ using UnityEngine;
 
 public class EnemyStateMachine : MonoBehaviour
 {
-    enum EnemyState
+    public enum EnemyState
     {
         Roaming,
         Chasing,
         Attacking
     }
 
-    private EnemyState enemyState;
+    [Header("Roaming")]
+    [SerializeField] private float maxRoamingDistance = 5f;
+    [SerializeField] private float minimalDistanceRoamed = 2f;
+
+
+    public EnemyState enemyState;
     private EnemyMovement enemyMovement;
     private PlayerDetection playerDetection;
 
+    private Transform player;
+
     private Vector2 startingPosition;
-    private float roamingDirectionX;
-    private float minimalDistanceRoamed = 2f;
-    private float maxRoamingDistance = 5f;
-    
+    private Vector2 roamingTarget;
+
     private void Awake()
     {
         enemyMovement = GetComponent<EnemyMovement>();
@@ -27,8 +32,13 @@ public class EnemyStateMachine : MonoBehaviour
     private void Start()
     {
         startingPosition = transform.position;
-        roamingDirectionX = GetRoamingDirectionX();
-        enemyState = EnemyState.Roaming;
+        
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerObject != null)
+            player = playerObject.transform;
+        
+        StartRoaming();
     }
 
     private void FixedUpdate()
@@ -36,30 +46,27 @@ public class EnemyStateMachine : MonoBehaviour
         switch(enemyState)
         {
             case EnemyState.Roaming:
-                Roam();
+                Roaming();
                 break;
             case EnemyState.Chasing:
                 Chasing();
                 break;
             case EnemyState.Attacking:
-                // Implement attacking behavior
+                Attacking();
                 break;
         }
        
     }
 
-    private void Roam()
+    private void Roaming()
     {
-        float direction = Mathf.Sign(roamingDirectionX - transform.position.x);
+        enemyMovement.MoveTo(roamingTarget);
 
-        enemyMovement.LinearMovement(direction);
+        bool targetReached = Mathf.Abs(transform.position.x - roamingTarget.x) < 0.1f;
 
-        bool reachedTarget = Mathf.Abs(transform.position.x - roamingDirectionX) < 0.1f;
-        bool noGround = !enemyMovement.IsGroundDetected();
-
-        if (reachedTarget || noGround)
+        if (targetReached || !enemyMovement.IsGroundAhead())
         {
-            roamingDirectionX = GetRoamingDirectionX();
+            roamingTarget.x = GetRoamingDirectionX();
         }
 
         if (playerDetection.IsPlayerSeen())
@@ -70,37 +77,58 @@ public class EnemyStateMachine : MonoBehaviour
 
     private void Chasing()
     {
-        // get the player's position
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
+        if (player == null)
         {
-            float direction = Mathf.Sign(player.transform.position.x - transform.position.x);
-            enemyMovement.LinearMovement(direction);
-            // Check if the player is still seen or detected
-            if (!playerDetection.playerInProximity && !playerDetection.IsPlayerSeen())
-            {
-                enemyState = EnemyState.Roaming;
-                roamingDirectionX = GetRoamingDirectionX();
-            }
+            StartRoaming();
+            return;
         }
-        else
+
+        if (!playerDetection.playerInProximity && !playerDetection.IsPlayerSeen())
         {
-            // If the player is not found, return to roaming state
-            enemyState = EnemyState.Roaming;
-            roamingDirectionX = GetRoamingDirectionX();
+            StartRoaming();
+            return;
         }
+
+        if (playerDetection.playerInAttackRange)
+        {
+            enemyState = EnemyState.Attacking;
+            return;
+        }
+
+        if (enemyMovement.IsGroundAhead() || !playerDetection.IsPlayerSeen() || !enemyMovement.isGrounded)
+            enemyMovement.MoveTo(player.position);
+        else 
+            enemyMovement.StopMoving();
+    }
+
+    private void Attacking()
+    {
+        enemyMovement.StopMoving();
+
+        if (!playerDetection.playerInAttackRange)
+        {
+            enemyState = EnemyState.Chasing;
+            return;
+        }
+
+        // Attack functionality here TBC
+    }
+
+    private void StartRoaming()
+    {
+        enemyState = EnemyState.Roaming;
+        roamingTarget.x = GetRoamingDirectionX();
     }
 
     private float GetRoamingDirectionX()
     {
-        float newPosition;
+        float target;
 
         do
         {
-            newPosition = startingPosition.x + Random.Range(-maxRoamingDistance, maxRoamingDistance);
+            target = startingPosition.x + Random.Range(-maxRoamingDistance, maxRoamingDistance);
+        } while (Mathf.Abs(target - transform.position.x) < minimalDistanceRoamed);
 
-        } while (Mathf.Abs(newPosition - transform.position.x) < minimalDistanceRoamed);
-
-        return newPosition;
+        return target;
     }
 }

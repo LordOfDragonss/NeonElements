@@ -2,27 +2,47 @@ using UnityEngine;
 
 public class PlayerDetection : MonoBehaviour
 {
+    public CustomEnemyTrigger detectionTrigger;
+    public CustomEnemyTrigger attackTrigger;
+
     [SerializeField] private LayerMask detectionLayers;
-    [SerializeField] private float seeingRange = 10f;
+    [SerializeField] private float seeingRange = 5f;
     [SerializeField] private Vector2 rayOffset = new Vector2(0.5f, 0f);
 
     public bool playerInProximity;
+    public bool playerInAttackRange;
 
-    // check if the player triggers the enemy's detection collider
-    private void OnTriggerEnter2D(Collider2D other)
+    private void Awake()
     {
-        if (other.CompareTag("Player"))
-        {
-            playerInProximity = true;
-        }
+        detectionTrigger.EnteredTrigger += OnDetectionTriggerEnter;
+        detectionTrigger.ExitedTrigger += OnDetectionTriggerExit;
+
+        attackTrigger.EnteredTrigger += OnAttackTriggerEnter;
+        attackTrigger.ExitedTrigger += OnAttackTriggerExit;
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    private void OnDetectionTriggerEnter(Collider2D collider)
     {
-        if (other.CompareTag("Player"))
-        {
+        if (collider.CompareTag("Player"))
+            playerInProximity = true;
+    }
+
+    private void OnDetectionTriggerExit(Collider2D collider)
+    {
+        if (collider.CompareTag("Player"))
             playerInProximity = false;
-        }
+    }
+
+    private void OnAttackTriggerEnter(Collider2D collider)
+    {
+        if (collider.CompareTag("Player"))
+            playerInAttackRange = true;
+    }
+
+    private void OnAttackTriggerExit(Collider2D collider)
+    {
+        if (collider.CompareTag("Player"))
+            playerInAttackRange = false;
     }
 
     // This method checks if the player is within the enemy's line of sight using raycasting.
