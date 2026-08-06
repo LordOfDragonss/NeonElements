@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a0526b95f5eb9574fb30e96569400a05
+guid: 1d2178e9b9c901a47aca355384cbc44b
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -30,7 +30,7 @@ ScriptedImporter:
     vTOnly: 0
     ignoreMipmapLimit: 0
     nPOTScale: 1
-    sRGBTexture: 1
+    sRGBTexture: 0
     spriteMode: 2
     spriteExtrude: 1
     spriteMeshType: 1
@@ -102,7 +102,7 @@ ScriptedImporter:
     generateIndividualEvents: 1
     generateSpriteAtlas: 1
   importFileNodeState: 1
-  platformSettingsDirtyTick: 639216242946177851
+  platformSettingsDirtyTick: 639216272112685031
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -127,40 +127,19 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Frame_0
+  - name: fella
     originalName: 
-    pivot: {x: 0.4754098, y: 0}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 74
-      width: 61
-      height: 62
-    spriteID: 8d109a1c83813344bbfc459355393e87
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 74}
-  - name: Frame_1
-    originalName: 
-    pivot: {x: 0.49206352, y: 0}
-    alignment: 9
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 63
-      height: 62
-    spriteID: 2ede4558f7ee5aa45ae8d23991c2af79
+      width: 27
+      height: 64
+    spriteID: dfd59ef4d29392744b9ddf96b855e4d3
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -169,69 +148,30 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
-  - name: Frame_2
-    originalName: 
-    pivot: {x: 0.4754098, y: 0}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 144
-      width: 61
-      height: 62
-    spriteID: 897d7528ae1b5ce4e8f7b15886180c21
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 144}
   spriteSheetImportData: []
   tileSetImportData: []
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 899606094
+      value0: 3967541546
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: SnailPerson
+    name: fella
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Frame_0
+    - name: fella
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 3
+        x: 19
         y: 0
-        width: 61
-        height: 62
-      spriteId: 8d109a1c83813344bbfc459355393e87
-    - name: Frame_1
-      frameIndex: 1
-      additiveSortOrder: 0
-      cellRect:
-        x: 1
-        y: 0
-        width: 63
-        height: 62
-      spriteId: 2ede4558f7ee5aa45ae8d23991c2af79
-    - name: Frame_2
-      frameIndex: 2
-      additiveSortOrder: 0
-      cellRect:
-        x: 3
-        y: 0
-        width: 61
-        height: 62
-      spriteId: 897d7528ae1b5ce4e8f7b15886180c21
+        width: 27
+        height: 64
+      spriteId: dfd59ef4d29392744b9ddf96b855e4d3
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
@@ -266,4 +206,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 64, y: 64}
-  previousTextureSize: {x: 128, y: 256}
+  previousTextureSize: {x: 64, y: 128}
