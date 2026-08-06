@@ -6,6 +6,7 @@ public class EnemyStateMachine : MonoBehaviour
     {
         Roaming,
         Chasing,
+        Jumping,
         Attacking
     }
 
@@ -13,15 +14,19 @@ public class EnemyStateMachine : MonoBehaviour
     [SerializeField] private float maxRoamingDistance = 5f;
     [SerializeField] private float minimalDistanceRoamed = 2f;
 
+    [Header("Jumping")]
+    [SerializeField] private float jumpHeightDifference = 3.5f;
 
     public EnemyState enemyState;
+
     private EnemyMovement enemyMovement;
     private PlayerDetection playerDetection;
-
     private Transform player;
 
     private Vector2 startingPosition;
     private Vector2 roamingTarget;
+
+    private bool jumpStarted;
 
     private void Awake()
     {
@@ -50,6 +55,9 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
             case EnemyState.Chasing:
                 Chasing();
+                break;
+            case EnemyState.Jumping:
+                Jumping();
                 break;
             case EnemyState.Attacking:
                 Attacking();
@@ -95,10 +103,46 @@ public class EnemyStateMachine : MonoBehaviour
             return;
         }
 
-        if (enemyMovement.IsGroundAhead() || !playerDetection.IsPlayerSeen() || !enemyMovement.isGrounded)
+        // Jumping logic
+        float yDifference = Mathf.Abs(player.position.y - transform.position.y);
+        bool needsJump = enemyMovement.isGrounded && yDifference > jumpHeightDifference;
+
+        if (needsJump)
+        {
+            jumpStarted = false;
+            enemyState = EnemyState.Jumping;
+            return;
+        }
+
+        if (enemyMovement.IsGroundAhead())
             enemyMovement.MoveTo(player.position);
-        else 
+        else
             enemyMovement.StopMoving();
+    }
+
+    private void Jumping()
+    {
+        if (player == null)
+        {
+            enemyState = EnemyState.Chasing;
+            return;
+        }
+
+        if (!jumpStarted)
+        {
+            enemyMovement.Jump(player.position);
+            jumpStarted = true;
+        }
+
+        enemyMovement.MoveTo(player.position);
+
+        if (jumpStarted &&
+            enemyMovement.isGrounded &&
+            enemyMovement.HasJumpFinished)
+        {
+            jumpStarted = false;
+            enemyState = EnemyState.Chasing;
+        }
     }
 
     private void Attacking()

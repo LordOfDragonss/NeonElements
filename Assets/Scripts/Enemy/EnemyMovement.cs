@@ -9,17 +9,26 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float jumpForce = 10f;
 
     public bool isGrounded;
-    private bool shouldJump;
-    
+    public bool HasJumpFinished;
+
+    private bool wasGrounded;
     private Rigidbody2D rb;
-    private Transform player;
-    private EnemyStateMachine enemyStateMachine;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        enemyStateMachine = GetComponent<EnemyStateMachine>();
+    }
+
+    private void Update()
+    {
+        wasGrounded = isGrounded;
+
+        // Enemy grounded check
+        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, 1.1f, floorLayers);
+
+        // Detect landing
+        if (!wasGrounded && isGrounded)
+            HasJumpFinished = true;
     }
 
     public void MoveTo(Vector2 target)
@@ -48,9 +57,9 @@ public class EnemyMovement : MonoBehaviour
         if (direction == 0)
             return;
 
-        transform.localScale = new Vector3(
-            Mathf.Abs(transform.localScale.x) * direction,
-            transform.localScale.y,
+        transform.localScale = new Vector3( 
+            Mathf.Abs(transform.localScale.x) * direction, 
+            transform.localScale.y, 
             transform.localScale.z);
     }
 
@@ -65,32 +74,22 @@ public class EnemyMovement : MonoBehaviour
         return Physics2D.Raycast(transform.position, rayDirection, groundAheadCheckDistance, floorLayers);
     }
 
-    private void Update()
+    public void Jump(Vector2 target)
     {
-        // Enemy grounded check
-        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, 1.1f, floorLayers);
+        if (!isGrounded)
+            return;
 
-        // check if player is above or below enemy and enemy is chasing player, if so, jump
-        if (enemyStateMachine.enemyState == EnemyStateMachine.EnemyState.Chasing &&
-            ((player.position.y-3f)  > transform.position.y || (player.position.y+3f)  < transform.position.y))
-        {
-            shouldJump = true;
-        }
-    }
+        HasJumpFinished = false;
 
-    private void FixedUpdate()
-    {
-        if (shouldJump && isGrounded)
-            Jump();
-    }
+        Vector2 direction =
+            (target - (Vector2)transform.position).normalized;
 
-    public void Jump()
-    {
-        shouldJump = false;
-        
-        Vector2 direction = (player.position - transform.position).normalized;
-        Vector2 jumpDirection = direction * jumpForce;
+        rb.linearVelocity = new Vector2(
+            rb.linearVelocity.x,
+            0);
 
-        rb.AddForce(new Vector2(jumpDirection.x, jumpForce), ForceMode2D.Impulse);
+        rb.AddForce(
+            new Vector2(direction.x * jumpForce, jumpForce),
+            ForceMode2D.Impulse);
     }
 }
