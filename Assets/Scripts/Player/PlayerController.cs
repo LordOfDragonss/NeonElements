@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.Windows;
 
 public class PlayerController : MonoBehaviour
@@ -10,12 +11,14 @@ public class PlayerController : MonoBehaviour
     public float groundCheckDistance = 0.5f;
     public int ExtraJumpsRemaining;
     public int TotalExtraJumps;
+    [SerializeField] float worldBottomBoundary = -50f;
     Rigidbody2D rb;
     Vector3 moveinput;
     public LayerMask floorLayers;
     public Animator animator;
     public GameObject Sprite;
     public PlayerAttack playerAttack;
+    public HealthSystem healthSystem;
     float lastDirection = 1f; // 1 = right, -1 = left
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -44,8 +47,24 @@ public class PlayerController : MonoBehaviour
         {
             ExtraJumpsRemaining = TotalExtraJumps;
         }
+        CheckBounds();
+
+        if(healthSystem.currentHealth == 0)//temp player death
+        {
+            Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
+            AudioManager.instance.Play("ReturnByDeath");
+        }
     }
 
+
+    public void CheckBounds()
+    {
+        if (transform.position.y < worldBottomBoundary)
+        {
+            GetComponent<HealthSystem>().TakeDamage(9999); // Inflict a large amount of damage to ensure death
+        }
+    }
 
 
     public void OnMove(InputValue value)
