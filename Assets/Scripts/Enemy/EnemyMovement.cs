@@ -5,7 +5,6 @@ public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] private LayerMask floorLayers;
     [SerializeField] private float moveSpeed = 2f;
-    [SerializeField] private float groundAheadCheckDistance = 1f;
     [SerializeField] private float jumpForce = 10f;
 
     public bool isGrounded;
