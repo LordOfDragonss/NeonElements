@@ -5,7 +5,6 @@ public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] private LayerMask floorLayers;
     [SerializeField] private float moveSpeed = 2f;
-    [SerializeField] private float groundAheadCheckDistance = 2f;
     [SerializeField] private float jumpForce = 10f;
 
     public bool isGrounded;
@@ -61,17 +60,6 @@ public class EnemyMovement : MonoBehaviour
             Mathf.Abs(transform.localScale.x) * direction, 
             transform.localScale.y, 
             transform.localScale.z);
-    }
-
-    public bool IsGroundAhead()
-    {
-        Vector2 rayDirection = transform.localScale.x > 0
-            ? (Vector2.down + Vector2.right).normalized
-            : (Vector2.down + Vector2.left).normalized;
-
-        Debug.DrawRay(transform.position, rayDirection * groundAheadCheckDistance, Color.green);
-
-        return Physics2D.Raycast(transform.position, rayDirection, groundAheadCheckDistance, floorLayers);
     }
 
     public void Jump(Vector2 target)

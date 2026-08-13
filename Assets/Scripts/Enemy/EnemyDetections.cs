@@ -1,13 +1,14 @@
 using UnityEngine;
 
-public class PlayerDetection : MonoBehaviour
+public class EnemyDetections : MonoBehaviour
 {
     public CustomEnemyTrigger detectionTrigger;
     public CustomEnemyTrigger attackTrigger;
 
-    [SerializeField] private LayerMask detectionLayers;
+    [SerializeField] private LayerMask playerDetectionLayers;
+    [SerializeField] private LayerMask floorDetectionLayers;
     [SerializeField] private float seeingRange = 5f;
-    [SerializeField] private Vector2 rayOffset = new Vector2(0.5f, 0f);
+    [SerializeField] private Vector2 rayOffset = new Vector2(0.25f, 0.25f);
 
     public bool playerInProximity;
     public bool playerInAttackRange;
@@ -45,6 +46,11 @@ public class PlayerDetection : MonoBehaviour
             playerInAttackRange = false;
     }
 
+    private void Update()
+    {
+        
+    }
+
     // This method checks if the player is within the enemy's line of sight using raycasting.
     public bool IsPlayerSeen() 
     {
@@ -66,7 +72,7 @@ public class PlayerDetection : MonoBehaviour
                 rayOrigin,
                 direction,
                 seeingRange,
-                detectionLayers
+                playerDetectionLayers
             );
 
             if (hit.collider != null && hit.collider.CompareTag("Player"))
@@ -78,5 +84,18 @@ public class PlayerDetection : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool IsGroundAhead()
+    {
+        Vector2 rayOrigin = transform.TransformPoint(new Vector2(0.25f,0.10f));
+
+        Vector2 rayDirection = transform.localScale.x > 0
+            ? (Vector2.down + Vector2.right).normalized
+            : (Vector2.down + Vector2.left).normalized;
+
+        Debug.DrawRay(rayOrigin, rayDirection, Color.green);
+
+        return Physics2D.Raycast(rayOrigin, rayDirection, 1f, floorDetectionLayers);
     }
 }

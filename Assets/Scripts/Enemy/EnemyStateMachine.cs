@@ -20,10 +20,10 @@ public class EnemyStateMachine : MonoBehaviour
     public EnemyState enemyState;
 
     private EnemyMovement enemyMovement;
-    private PlayerDetection playerDetection;
+    private EnemyDetections enemyDetections;
     private Transform player;
 
-    private Vector2 startingPosition;
+    private Vector2 startRoamingPosition;
     private Vector2 roamingTarget;
 
     private bool jumpStarted;
@@ -31,13 +31,11 @@ public class EnemyStateMachine : MonoBehaviour
     private void Awake()
     {
         enemyMovement = GetComponent<EnemyMovement>();
-        playerDetection = GetComponent<PlayerDetection>();
+        enemyDetections = GetComponent<EnemyDetections>();
     }
 
     private void Start()
     {
-        startingPosition = transform.position;
-        
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
 
         if (playerObject != null)
@@ -72,12 +70,12 @@ public class EnemyStateMachine : MonoBehaviour
 
         bool targetReached = Mathf.Abs(transform.position.x - roamingTarget.x) < 0.1f;
 
-        if (targetReached || !enemyMovement.IsGroundAhead())
+        if (targetReached || !enemyDetections.IsGroundAhead())
         {
             roamingTarget.x = GetRoamingDirectionX();
         }
 
-        if (playerDetection.IsPlayerSeen())
+        if (enemyDetections.IsPlayerSeen())
         {
             enemyState = EnemyState.Chasing;
         }
@@ -91,13 +89,13 @@ public class EnemyStateMachine : MonoBehaviour
             return;
         }
 
-        if (!playerDetection.playerInProximity && !playerDetection.IsPlayerSeen())
+        if (!enemyDetections.playerInProximity && !enemyDetections.IsPlayerSeen())
         {
             StartRoaming();
             return;
         }
 
-        if (playerDetection.playerInAttackRange)
+        if (enemyDetections.playerInAttackRange)
         {
             enemyState = EnemyState.Attacking;
             return;
@@ -105,7 +103,7 @@ public class EnemyStateMachine : MonoBehaviour
 
         // Jumping logic
         float yDifference = Mathf.Abs(player.position.y - transform.position.y);
-        bool needsJump = enemyMovement.isGrounded && yDifference > jumpHeightDifference;
+        bool needsJump = (enemyMovement.isGrounded && yDifference > jumpHeightDifference) || !enemyDetections.IsGroundAhead();
 
         if (needsJump)
         {
@@ -114,7 +112,7 @@ public class EnemyStateMachine : MonoBehaviour
             return;
         }
 
-        if (enemyMovement.IsGroundAhead())
+        if (enemyDetections.IsGroundAhead())
             enemyMovement.MoveTo(player.position);
         else
             enemyMovement.StopMoving();
@@ -149,7 +147,7 @@ public class EnemyStateMachine : MonoBehaviour
     {
         enemyMovement.StopMoving();
 
-        if (!playerDetection.playerInAttackRange)
+        if (!enemyDetections.playerInAttackRange)
         {
             enemyState = EnemyState.Chasing;
             return;
@@ -160,6 +158,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     private void StartRoaming()
     {
+        startRoamingPosition = transform.position;
         enemyState = EnemyState.Roaming;
         roamingTarget.x = GetRoamingDirectionX();
     }
@@ -170,7 +169,7 @@ public class EnemyStateMachine : MonoBehaviour
 
         do
         {
-            target = startingPosition.x + Random.Range(-maxRoamingDistance, maxRoamingDistance);
+            target = startRoamingPosition.x + Random.Range(-maxRoamingDistance, maxRoamingDistance);
         } while (Mathf.Abs(target - transform.position.x) < minimalDistanceRoamed);
 
         return target;
