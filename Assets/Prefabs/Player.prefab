@@ -557,16 +557,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Movementspeed: 5
-  JumpForce: 8
+  JumpForce: 8.5
   groundCheckDistance: 1.5
   ExtraJumpsRemaining: 0
   TotalExtraJumps: 1
+  worldBottomBoundary: -50
   floorLayers:
     serializedVersion: 2
     m_Bits: 8
   animator: {fileID: 0}
   Sprite: {fileID: 3345703262309095308}
   playerAttack: {fileID: 9053441817712473130}
+  healthSystem: {fileID: 0}
 --- !u!114 &9053441817712473130
 MonoBehaviour:
   m_ObjectHideFlags: 0
