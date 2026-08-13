@@ -40,13 +40,13 @@ public class EnemyStateMachine : MonoBehaviour
 
         if (playerObject != null)
             player = playerObject.transform;
-        
+
         StartRoaming();
     }
 
     private void FixedUpdate()
     {
-        switch(enemyState)
+        switch (enemyState)
         {
             case EnemyState.Roaming:
                 Roaming();
@@ -61,7 +61,7 @@ public class EnemyStateMachine : MonoBehaviour
                 Attacking();
                 break;
         }
-       
+
     }
 
     private void Roaming()
@@ -70,7 +70,7 @@ public class EnemyStateMachine : MonoBehaviour
 
         bool targetReached = Mathf.Abs(transform.position.x - roamingTarget.x) < 0.1f;
 
-        if (targetReached || !enemyDetections.IsGroundAhead())
+        if (targetReached || !enemyDetections.IsGroundAhead() || enemyDetections.EnemyCollidesWithEnemy())
         {
             roamingTarget.x = GetRoamingDirectionX();
         }

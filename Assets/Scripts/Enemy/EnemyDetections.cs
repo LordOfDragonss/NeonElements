@@ -7,6 +7,7 @@ public class EnemyDetections : MonoBehaviour
 
     [SerializeField] private LayerMask playerDetectionLayers;
     [SerializeField] private LayerMask floorDetectionLayers;
+    [SerializeField] private LayerMask enemyDetectionLayers;
     [SerializeField] private float seeingRange = 5f;
     [SerializeField] private Vector2 rayOffset = new Vector2(0.25f, 0.25f);
 
@@ -84,6 +85,26 @@ public class EnemyDetections : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool EnemyCollidesWithEnemy()
+    {
+        Vector2 rayOrigin = transform.TransformPoint(new Vector2(0.25f, 0.5f));
+
+        Vector2 rayDirection = transform.localScale.x > 0
+            ? Vector2.right : Vector2.left;
+
+        RaycastHit2D raycast = Physics2D.Raycast(rayOrigin, rayDirection, 0.25f, enemyDetectionLayers);
+
+        Debug.DrawRay(rayOrigin, rayDirection * 0.25f, Color.red);
+
+        // check if raycast does not see itself 
+        if (this.gameObject == raycast.collider?.gameObject)
+        {
+            return false;
+        }
+
+        return raycast;
     }
 
     public bool IsGroundAhead()
