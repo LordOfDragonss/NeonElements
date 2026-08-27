@@ -31,7 +31,10 @@ public class EnemyMovement : MonoBehaviour
         wasGrounded = isGrounded;
 
         // Enemy grounded check
-        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, 1.1f, floorLayers);
+        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, 0.1f, floorLayers);
+
+        // draw the raycast in the editor for debugging
+        Debug.DrawRay(transform.position, Vector2.down * 0.1f, isGrounded ? Color.green : Color.red);
 
         // Detect landing
         if (!wasGrounded && isGrounded)

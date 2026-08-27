@@ -61,6 +61,8 @@ public class EnemyDetections : MonoBehaviour
 
         Vector2 rayOrigin = transform.TransformPoint(rayOffset);
 
+        int detectionLayerMask = playerDetectionLayers | floorDetectionLayers;
+
         for (int i = 0; i < numberOfRays; i++)
         {
             float angle = startAngle + angleStep * i;
@@ -68,20 +70,27 @@ public class EnemyDetections : MonoBehaviour
             // direction based on the enemy's facing direction
             Vector2 direction = Quaternion.Euler(0, 0, angle) * (transform.localScale.x > 0 ? Vector2.right : Vector2.left);
 
-
             RaycastHit2D hit = Physics2D.Raycast(
                 rayOrigin,
                 direction,
                 seeingRange,
-                playerDetectionLayers
+                detectionLayerMask
             );
 
-            if (hit.collider != null && hit.collider.CompareTag("Player"))
+            if (hit.collider != null)
             {
-                Debug.DrawRay(rayOrigin, direction * hit.distance, Color.red);
-                return true;
+                Debug.DrawRay(rayOrigin, direction * hit.distance, hit.collider.CompareTag("Player") ? Color.red : Color.blue);
+
+                if (hit.collider.CompareTag("Player"))
+                {
+                    return true;
+                }
             }
-            Debug.DrawRay(rayOrigin, direction * seeingRange, Color.yellow);
+            else
+            {
+                Debug.DrawRay(rayOrigin, direction * seeingRange, Color.yellow
+                );
+            }
         }
 
         return false;
@@ -104,6 +113,25 @@ public class EnemyDetections : MonoBehaviour
             return false;
         }
 
+        return raycast;
+    }
+
+    public bool EnemyCollidesWithWall()
+    {
+        Vector2 rayOrigin = transform.TransformPoint(new Vector2(0.25f, 0.5f));
+
+        Vector2 rayDirection = transform.localScale.x > 0
+            ? Vector2.right : Vector2.left;
+
+        RaycastHit2D raycast = Physics2D.Raycast(rayOrigin, rayDirection, 0.25f, floorDetectionLayers);
+
+        Debug.DrawRay(rayOrigin, rayDirection * 0.25f, Color.red);
+
+        // check if raycast does not see itself 
+        if (this.gameObject == raycast.collider?.gameObject)
+        {
+            return false;
+        }
         return raycast;
     }
 
