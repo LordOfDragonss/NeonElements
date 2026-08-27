@@ -10,24 +10,38 @@ public class EnemyMovement : MonoBehaviour
     public bool isGrounded;
     public bool HasJumpFinished;
 
+    private float jumpCooldownTime = 2.5f;
+    public float jumpCooldown;
+
     private bool wasGrounded;
     private Rigidbody2D rb;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        jumpCooldown = jumpCooldownTime;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
+        // jump cooldown
+        if (jumpCooldown > 0)
+            jumpCooldown -= Time.fixedDeltaTime;
+
         wasGrounded = isGrounded;
 
         // Enemy grounded check
-        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, 1.1f, floorLayers);
+        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, 0.1f, floorLayers);
+
+        // draw the raycast in the editor for debugging
+        Debug.DrawRay(transform.position, Vector2.down * 0.1f, isGrounded ? Color.green : Color.red);
 
         // Detect landing
         if (!wasGrounded && isGrounded)
+        {
+            jumpCooldown = jumpCooldownTime;
             HasJumpFinished = true;
+        } 
     }
 
     public void MoveTo(Vector2 target)
@@ -64,7 +78,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void Jump(Vector2 target)
     {
-        if (!isGrounded)
+        if (!isGrounded || jumpCooldown > 0)
             return;
 
         HasJumpFinished = false;

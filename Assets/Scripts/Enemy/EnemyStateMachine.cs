@@ -26,7 +26,7 @@ public class EnemyStateMachine : MonoBehaviour
     private Vector2 startRoamingPosition;
     private Vector2 roamingTarget;
 
-    private bool jumpStarted;
+    private bool jumpStarted = false;
 
     private void Awake()
     {
@@ -40,13 +40,13 @@ public class EnemyStateMachine : MonoBehaviour
 
         if (playerObject != null)
             player = playerObject.transform;
-        
+
         StartRoaming();
     }
 
     private void FixedUpdate()
     {
-        switch(enemyState)
+        switch (enemyState)
         {
             case EnemyState.Roaming:
                 Roaming();
@@ -61,7 +61,7 @@ public class EnemyStateMachine : MonoBehaviour
                 Attacking();
                 break;
         }
-       
+
     }
 
     private void Roaming()
@@ -70,7 +70,7 @@ public class EnemyStateMachine : MonoBehaviour
 
         bool targetReached = Mathf.Abs(transform.position.x - roamingTarget.x) < 0.1f;
 
-        if (targetReached || !enemyDetections.IsGroundAhead())
+        if (targetReached || !enemyDetections.IsGroundAhead() || enemyDetections.EnemyCollidesWithEnemy() || enemyDetections.EnemyCollidesWithWall())
         {
             roamingTarget.x = GetRoamingDirectionX();
         }
@@ -103,16 +103,15 @@ public class EnemyStateMachine : MonoBehaviour
 
         // Jumping logic
         float yDifference = Mathf.Abs(player.position.y - transform.position.y);
-        bool needsJump = (enemyMovement.isGrounded && yDifference > jumpHeightDifference) || !enemyDetections.IsGroundAhead();
+        bool needsJump = ((enemyMovement.isGrounded && yDifference > jumpHeightDifference) || !enemyDetections.IsGroundAhead()) && enemyMovement.jumpCooldown <= 0 && enemyMovement.HasJumpFinished;
 
         if (needsJump)
         {
-            jumpStarted = false;
             enemyState = EnemyState.Jumping;
             return;
         }
 
-        if (enemyDetections.IsGroundAhead())
+        if (enemyDetections.IsGroundAhead() && !enemyDetections.EnemyCollidesWithEnemy() && !enemyDetections.EnemyCollidesWithWall())
             enemyMovement.MoveTo(player.position);
         else
             enemyMovement.StopMoving();
@@ -122,6 +121,7 @@ public class EnemyStateMachine : MonoBehaviour
     {
         if (player == null)
         {
+            jumpStarted = false;
             enemyState = EnemyState.Chasing;
             return;
         }
@@ -132,11 +132,12 @@ public class EnemyStateMachine : MonoBehaviour
             jumpStarted = true;
         }
 
-        enemyMovement.MoveTo(player.position);
+        if (enemyDetections.EnemyCollidesWithWall())
+            enemyMovement.StopMoving();
+        else
+            enemyMovement.MoveTo(player.position);
 
-        if (jumpStarted &&
-            enemyMovement.isGrounded &&
-            enemyMovement.HasJumpFinished)
+        if (jumpStarted && enemyMovement.HasJumpFinished)
         {
             jumpStarted = false;
             enemyState = EnemyState.Chasing;
