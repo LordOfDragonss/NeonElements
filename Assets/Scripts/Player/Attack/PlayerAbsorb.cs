@@ -154,7 +154,7 @@ public class PlayerAbsorb : MonoBehaviour
                 sprite.color = Color.white;
                 break;
             case AbilityType.Blue:
-                sprite.color = Color.blue;
+                sprite.color = Color.cyan;
                 // Implement Blue ability action
                 break;
             case AbilityType.Red:

@@ -95,9 +95,10 @@ GameObject:
   - component: {fileID: 8319220131307658606}
   - component: {fileID: 3478854220871102542}
   - component: {fileID: 74377173386552455}
+  - component: {fileID: 3909537607020532143}
   m_Layer: 0
   m_Name: Robot
-  m_TagString: Untagged
+  m_TagString: Dummy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -243,6 +244,19 @@ MonoBehaviour:
   rayOffset: {x: 0.5, y: 0}
   playerInProximity: 0
   playerInAttackRange: 0
+--- !u!114 &3909537607020532143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7104674708166849756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c266e7f7f52ace343b5a9c64f9ca6155, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestAbilityGiver
+  EnemyType: 1
 --- !u!1 &9099035518674404269
 GameObject:
   m_ObjectHideFlags: 0
