@@ -103,7 +103,7 @@ public class EnemyStateMachine : MonoBehaviour
 
         // Jumping logic
         float yDifference = Mathf.Abs(player.position.y - transform.position.y);
-        bool needsJump = (enemyMovement.isGrounded && yDifference > jumpHeightDifference) || !enemyDetections.IsGroundAhead();
+        bool needsJump = ((enemyMovement.isGrounded && yDifference > jumpHeightDifference) || !enemyDetections.IsGroundAhead()) && enemyMovement.jumpCooldown <= 0;
 
         if (needsJump)
         {
@@ -112,7 +112,7 @@ public class EnemyStateMachine : MonoBehaviour
             return;
         }
 
-        if (enemyDetections.IsGroundAhead())
+        if (enemyDetections.IsGroundAhead() && !enemyDetections.EnemyCollidesWithEnemy())
             enemyMovement.MoveTo(player.position);
         else
             enemyMovement.StopMoving();
@@ -122,6 +122,7 @@ public class EnemyStateMachine : MonoBehaviour
     {
         if (player == null)
         {
+            jumpStarted = false;
             enemyState = EnemyState.Chasing;
             return;
         }
@@ -134,9 +135,7 @@ public class EnemyStateMachine : MonoBehaviour
 
         enemyMovement.MoveTo(player.position);
 
-        if (jumpStarted &&
-            enemyMovement.isGrounded &&
-            enemyMovement.HasJumpFinished)
+        if (jumpStarted && enemyMovement.HasJumpFinished)
         {
             jumpStarted = false;
             enemyState = EnemyState.Chasing;
