@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2169543787235358092}
   - component: {fileID: 2733354937957265708}
   - component: {fileID: 5368285929052392074}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DetectionTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 3255077342812188659}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 3478854220871102542}
   - component: {fileID: 74377173386552455}
   - component: {fileID: 3909537607020532143}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Robot
   m_TagString: Dummy
   m_Icon: {fileID: 0}
@@ -155,7 +155,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.5}
   m_Size: {x: 0.75, y: 1}
   m_Direction: 0
 --- !u!50 &274059188499620220
@@ -220,6 +220,7 @@ MonoBehaviour:
   jumpForce: 0
   isGrounded: 0
   HasJumpFinished: 0
+  jumpCooldown: 0
 --- !u!114 &74377173386552455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,6 +241,9 @@ MonoBehaviour:
   floorDetectionLayers:
     serializedVersion: 2
     m_Bits: 8
+  enemyDetectionLayers:
+    serializedVersion: 2
+    m_Bits: 256
   seeingRange: 5
   rayOffset: {x: 0.5, y: 0}
   playerInProximity: 0
@@ -268,7 +272,7 @@ GameObject:
   - component: {fileID: 4960351060920112648}
   - component: {fileID: 1139120954327359303}
   - component: {fileID: 1111574628834122895}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AttackTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -284,7 +288,7 @@ Transform:
   m_GameObject: {fileID: 9099035518674404269}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -350,13 +354,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: snowmanbot
       objectReference: {fileID: 0}
+    - target: {fileID: -2253911629886400664, guid: 90ececddaa1540647a28752f561ef7c0, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 90ececddaa1540647a28752f561ef7c0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 90ececddaa1540647a28752f561ef7c0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 90ececddaa1540647a28752f561ef7c0, type: 3}
       propertyPath: m_LocalPosition.z
