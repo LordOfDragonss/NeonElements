@@ -119,30 +119,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &600176669 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9173835080830314400, guid: e695438e321d28a48a92625f6829735c, type: 3}
-  m_PrefabInstance: {fileID: 3223153875020261102}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &600176671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 600176669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c266e7f7f52ace343b5a9c64f9ca6155, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestAbilityGiver
-  EnemyType: 1
 --- !u!1 &652784486 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 313298309089864027, guid: e695438e321d28a48a92625f6829735c, type: 3}
   m_PrefabInstance: {fileID: 3223153875020261102}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &652784490
+--- !u!114 &652784494
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -151,9 +133,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 652784486}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e3819336aaf40446a70fa3c4ebe5fd1, type: 3}
+  m_Script: {fileID: 11500000, guid: 3417e7a7c572afd4fa210b4d18d5f2c5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DissapearingDoor
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAbilityCondition
+  abilityType: 1
+--- !u!114 &652784495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652784486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f98af96830f352f4cb28eeadf95b99a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConditionalDoor
+  conditions:
+  - {fileID: 652784494}
+  doorAnimator: {fileID: 0}
 --- !u!1001 &990316336
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -301,18 +299,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1710169042}
-        m_TargetAssemblyTypeName: DissapearingDoor, Assembly-CSharp
-        m_MethodName: Dissapear
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 652784490}
         m_TargetAssemblyTypeName: DissapearingDoor, Assembly-CSharp
         m_MethodName: Dissapear
         m_Mode: 1
@@ -479,18 +465,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1710169038 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7188979649874146151, guid: e695438e321d28a48a92625f6829735c, type: 3}
+--- !u!114 &1710169042 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4461005819834173961, guid: e695438e321d28a48a92625f6829735c, type: 3}
   m_PrefabInstance: {fileID: 3223153875020261102}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1710169042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1710169038}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e3819336aaf40446a70fa3c4ebe5fd1, type: 3}
@@ -511,6 +491,10 @@ PrefabInstance:
     - target: {fileID: 3345703262309095308, guid: fa60fc546c392d340a4a96c3e17d3589, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4461240762321927235, guid: fa60fc546c392d340a4a96c3e17d3589, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4461240762321927235, guid: fa60fc546c392d340a4a96c3e17d3589, type: 3}
       propertyPath: m_IsActive
@@ -595,7 +579,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1890399672186803091, guid: 83fd0d92ce94b714fa8677a5f4dde3cd, type: 3}
       propertyPath: orthographic size
-      value: 3
+      value: 2.8125
       objectReference: {fileID: 0}
     - target: {fileID: 5621951433073278579, guid: 83fd0d92ce94b714fa8677a5f4dde3cd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -743,6 +727,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stage 6
       objectReference: {fileID: 0}
+    - target: {fileID: 4784276462656890198, guid: 235b65a7a7a6c3741990df9b5be4a5f1, type: 3}
+      propertyPath: m_GravityScale
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6411477655673756510, guid: 235b65a7a7a6c3741990df9b5be4a5f1, type: 3}
+      propertyPath: jumpForce
+      value: 8.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6411477655673756510, guid: 235b65a7a7a6c3741990df9b5be4a5f1, type: 3}
+      propertyPath: moveSpeed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6495303431283021869, guid: 235b65a7a7a6c3741990df9b5be4a5f1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10
@@ -797,16 +793,28 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 313298309089864027, guid: e695438e321d28a48a92625f6829735c, type: 3}
-      propertyPath: m_Name
-      value: DissDoor
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 4905917563470290656, guid: e695438e321d28a48a92625f6829735c, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 15.154616
+    - target: {fileID: 922347299682130100, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 4905917563470290656, guid: e695438e321d28a48a92625f6829735c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 9.5504
+    - target: {fileID: 2142085286410297145, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3523145314362653839, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4117220345302218815, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4117220345302218815, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5048612928077086287, guid: e695438e321d28a48a92625f6829735c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -848,27 +856,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7173854873100013777, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7188979649874146151, guid: e695438e321d28a48a92625f6829735c, type: 3}
-      propertyPath: m_Name
-      value: DissDoor
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7961388190359316552, guid: e695438e321d28a48a92625f6829735c, type: 3}
       propertyPath: m_Name
       value: Stage 5
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 9173835080830314400, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 9173835080830314400, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2510900120634241167, guid: e695438e321d28a48a92625f6829735c, type: 3}
+    - {fileID: 9212021657285817244, guid: e695438e321d28a48a92625f6829735c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 9173835080830314400, guid: e695438e321d28a48a92625f6829735c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 600176671}
-    - targetCorrespondingSourceObject: {fileID: 7188979649874146151, guid: e695438e321d28a48a92625f6829735c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1710169042}
     - targetCorrespondingSourceObject: {fileID: 313298309089864027, guid: e695438e321d28a48a92625f6829735c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 652784490}
+      addedObject: {fileID: 652784495}
+    - targetCorrespondingSourceObject: {fileID: 313298309089864027, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 652784494}
   m_SourcePrefab: {fileID: 100100000, guid: e695438e321d28a48a92625f6829735c, type: 3}
 --- !u!1001 &4853326032414020983
 PrefabInstance:
