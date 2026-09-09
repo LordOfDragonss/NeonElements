@@ -176,6 +176,7 @@ GameObject:
   - component: {fileID: 2034692266921168715}
   - component: {fileID: 514935968085347661}
   - component: {fileID: 2381088015793790349}
+  - component: {fileID: 7628224161725012009}
   m_Layer: 8
   m_Name: Succubes
   m_TagString: Untagged
@@ -328,6 +329,21 @@ MonoBehaviour:
   jumpForce: 10
   isGrounded: 0
   HasJumpFinished: 0
+  jumpCooldown: 0
+--- !u!114 &7628224161725012009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7456778411136835024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f767c16bccdf03347bf4a2ab1bb597f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  attacks:
+  - {fileID: 11400000, guid: e3b2be624c98b8544a257610f17af20f, type: 2}
 --- !u!1001 &3405224625300896152
 PrefabInstance:
   m_ObjectHideFlags: 0

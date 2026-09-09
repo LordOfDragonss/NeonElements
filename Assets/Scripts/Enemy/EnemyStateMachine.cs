@@ -19,8 +19,11 @@ public class EnemyStateMachine : MonoBehaviour
 
     public EnemyState enemyState;
 
+    private Enemy enemy;
     private EnemyMovement enemyMovement;
     private EnemyDetections enemyDetections;
+    private float enemyAttackTimer;
+
     private Transform player;
 
     private Vector2 startRoamingPosition;
@@ -28,10 +31,13 @@ public class EnemyStateMachine : MonoBehaviour
 
     private bool jumpStarted = false;
 
+    
+
     private void Awake()
     {
         enemyMovement = GetComponent<EnemyMovement>();
         enemyDetections = GetComponent<EnemyDetections>();
+        enemy = GetComponent<Enemy>();
     }
 
     private void Start()
@@ -150,11 +156,22 @@ public class EnemyStateMachine : MonoBehaviour
 
         if (!enemyDetections.playerInAttackRange)
         {
+            enemyAttackTimer = 0f;
             enemyState = EnemyState.Chasing;
             return;
         }
 
         // Attack functionality here TBC
+
+        if (enemyAttackTimer > 0f)
+        {
+            enemyAttackTimer -= Time.fixedDeltaTime;
+            return;
+        }
+        
+        enemy.Attack();
+
+        enemyAttackTimer = enemy.CurrentAttack.Cooldown;
     }
 
     private void StartRoaming()

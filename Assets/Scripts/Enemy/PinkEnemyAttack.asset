@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744642b61d1cf1e499f47c22783d79e6, type: 3}
+  m_Name: PinkEnemyAttack
+  m_EditorClassIdentifier: Assembly-CSharp::PinkEnemyAttack
+  cooldown: 1
+  damage: 0
+  projectilePrefab: {fileID: 2608262601057410900, guid: e6f7fcfc9db69a648852e5277715b66e, type: 3}
