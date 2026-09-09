@@ -68,6 +68,8 @@ public class EnemyStateMachine : MonoBehaviour
                 break;
         }
 
+        if (enemyAttackTimer > 0f)
+            enemyAttackTimer -= Time.fixedDeltaTime;
     }
 
     private void Roaming()
@@ -156,16 +158,12 @@ public class EnemyStateMachine : MonoBehaviour
 
         if (!enemyDetections.playerInAttackRange)
         {
-            enemyAttackTimer = 0f;
             enemyState = EnemyState.Chasing;
             return;
         }
 
-        // Attack functionality here TBC
-
         if (enemyAttackTimer > 0f)
         {
-            enemyAttackTimer -= Time.fixedDeltaTime;
             return;
         }
         

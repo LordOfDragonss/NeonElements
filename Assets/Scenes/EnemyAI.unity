@@ -179,14 +179,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Succubes
       objectReference: {fileID: 0}
-    - target: {fileID: 7456778411136835024, guid: 0c1b434f226851848abcc44d05697993, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7456778411136835024, guid: 0c1b434f226851848abcc44d05697993, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
     - {fileID: 512881854924620723, guid: 0c1b434f226851848abcc44d05697993, type: 3}

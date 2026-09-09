@@ -5,10 +5,8 @@ public class PinkEnemyAttack : Attack
 {
     [SerializeField] PinkEnemyProjectile projectilePrefab;
 
-    public override void Execute(Transform transform)
+    public override void Execute(Transform transform, Transform playerTransform)
     {
-        Transform playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-
         PinkEnemyProjectile projectile = 
             Instantiate(
                 projectilePrefab, 
