@@ -1,12 +1,15 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Windows;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour,ISlowable
 {
     public float Movementspeed;
+    private float currentSpeedMultiplier = 1f;
+    private Coroutine slowCoroutine;
     public float JumpForce;
     public float groundCheckDistance = 0.5f;
     public int ExtraJumpsRemaining;
@@ -19,7 +22,8 @@ public class PlayerController : MonoBehaviour
     public GameObject Sprite;
     public PlayerAttack playerAttack;
     public HealthSystem healthSystem;
-    float lastDirection = 1f; // 1 = right, -1 = left
+    public float lastDirection = 1f; // 1 = right, -1 = left
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,7 +33,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        rb.linearVelocity = (new Vector2(moveinput.x * Movementspeed, rb.linearVelocity.y));
+        rb.linearVelocity = (new Vector2(moveinput.x * Movementspeed * currentSpeedMultiplier, rb.linearVelocity.y));
         if (animator != null)
         {
             animator.SetBool("Walking", rb.linearVelocityX != 0);
@@ -78,7 +82,7 @@ public class PlayerController : MonoBehaviour
         if (ExtraJumpsRemaining > 0)
         {
             ExtraJumpsRemaining--;
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, JumpForce);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, JumpForce * currentSpeedMultiplier);
             if (animator != null)
                 animator.SetTrigger("JumpTrigger");
         }
@@ -97,5 +101,23 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance);
         Gizmos.DrawLine(transform.position + new Vector3(0.5f, 0, 0), transform.position + new Vector3(0.5f, 0, 0) + Vector3.down * groundCheckDistance);
         Gizmos.DrawLine(transform.position + new Vector3(-0.5f, 0, 0), transform.position + new Vector3(-0.5f, 0, 0) + Vector3.down * groundCheckDistance);
+    }
+
+    public void ApplySlow(float amount, float duration)
+    {
+        if (slowCoroutine != null)
+            StopCoroutine(slowCoroutine);
+
+        slowCoroutine = StartCoroutine(Slow(amount, duration));
+    }
+
+    private IEnumerator Slow(float amount, float duration)
+    {
+        currentSpeedMultiplier = 1f - amount;
+
+        yield return new WaitForSeconds(duration);
+
+        currentSpeedMultiplier = 1f;
+        slowCoroutine = null;
     }
 }

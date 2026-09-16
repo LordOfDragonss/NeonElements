@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public AbilityType EnemyType;
     [SerializeField] private Attack[] attacks;
     private GameObject player;
 
