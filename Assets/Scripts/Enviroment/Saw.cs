@@ -7,7 +7,7 @@ public class Saw : MonoBehaviour
     public Saw SpawnSaw(Vector3 spawnLocation)
     {
        GameObject saw = Instantiate(gameObject, spawnLocation, Quaternion.identity);
-        return saw.GetComponent<Saw>();
+       return saw.GetComponent<Saw>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
