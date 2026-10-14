@@ -56,7 +56,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void SetAttackCollider()
     {
-        attackCollider.isTrigger = isAttacking;
+        //attackCollider.isTrigger = isAttacking;
     }
 
     public void OnAttackTriggerEnter(Collider2D collision)

@@ -61,6 +61,14 @@ public class PlayerController : MonoBehaviour,ISlowable
         }
     }
 
+    public void Knockback(float Force,Vector3 opposingForce)
+    {
+        Vector2 direction = (transform.position - opposingForce).normalized;
+        Vector2 knockbackForce = direction * Force;
+        rb.linearVelocity = Vector2.zero; // Reset current velocity before applying knockback
+        rb.AddForce(knockbackForce, ForceMode2D.Impulse);
+    }
+
 
     public void CheckBounds()
     {
