@@ -2,14 +2,19 @@ using UnityEngine;
 
 public class PinkEnemyProjectile : MonoBehaviour
 {
+    private PlayerController playerController;
+
+    private Transform origin;
     private Transform target;
+   
     private float damage;
 
     [SerializeField] private float speed = 5f;
     [SerializeField] private float lifetime = 3f;
 
-    public void Initialize(Transform target, float damage)
+    public void Initialize(Transform origin, Transform target, float damage)
     {
+        this.origin = origin;
         this.target = target;
         this.damage = damage;
 
@@ -30,12 +35,17 @@ public class PinkEnemyProjectile : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             Debug.Log("Player hit by projectile");
+            Debug.Log(origin.position);
+            if (collision.TryGetComponent(out PlayerController playerController))
+                playerController.OnCharmed(origin, 2f);
+
             Destroy(gameObject);
+
         }
 
-        else if (collision.CompareTag("Wall"))
+        else if (collision.CompareTag("Terain"))
         {
-            Debug.Log("Projectile hit wall");
+            Debug.Log("Projectile hit terain");
             Destroy(gameObject);
         }
     }

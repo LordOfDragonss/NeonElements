@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,6 +21,15 @@ public class PlayerController : MonoBehaviour
     public PlayerAttack playerAttack;
     public HealthSystem healthSystem;
     float lastDirection = 1f; // 1 = right, -1 = left
+
+    // Status Effects
+    private Coroutine charmRoutine;
+    private Transform charmSource;
+    private bool isCharmed;
+    [SerializeField] private float charmedSpeed = 1.5f;
+    [SerializeField] private float charmStopDistance = .5f;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,7 +39,16 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        rb.linearVelocity = (new Vector2(moveinput.x * Movementspeed, rb.linearVelocity.y));
+        if (isCharmed && charmSource != null) 
+        {
+            float xVelocity;
+            float dx = charmSource.position.x - transform.position.x;
+            xVelocity = Mathf.Abs(dx) > charmStopDistance ? Mathf.Sign(dx) * charmedSpeed : 0f;
+
+            rb.linearVelocity = new Vector2(xVelocity, rb.linearVelocity.y);
+        }
+        else rb.linearVelocity = (new Vector2(moveinput.x * Movementspeed, rb.linearVelocity.y));
+
         if (animator != null)
         {
             animator.SetBool("Walking", rb.linearVelocityX != 0);
@@ -75,13 +94,33 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump()
     {
-        if (ExtraJumpsRemaining > 0)
+        if (ExtraJumpsRemaining > 0 && !isCharmed)
         {
             ExtraJumpsRemaining--;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, JumpForce);
             if (animator != null)
                 animator.SetTrigger("JumpTrigger");
         }
+    }
+
+    public void OnCharmed(Transform enemyPos, float charmDuration)
+    {
+        charmSource = enemyPos;
+
+        // Restart the timer if already charmed
+        if (charmRoutine != null)
+            StopCoroutine(charmRoutine);
+
+        charmRoutine = StartCoroutine(CharmRoutine(charmDuration));
+    }
+
+    private IEnumerator CharmRoutine(float duration)
+    {
+        isCharmed = true;
+        yield return new WaitForSeconds(duration);
+        isCharmed = false;
+        charmSource = null;
+        charmRoutine = null;
     }
 
     public bool isOnGround()

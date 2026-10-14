@@ -282,7 +282,10 @@ MonoBehaviour:
   maxRoamingDistance: 5
   minimalDistanceRoamed: 2
   jumpHeightDifference: 3.5
-  enemyState: 0
+  enemyState: 1
+  startIdleState: 0
+  canChase: 1
+  canJump: 1
 --- !u!114 &514935968085347661
 MonoBehaviour:
   m_ObjectHideFlags: 0
