@@ -311,17 +311,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   OneShot: 1
---- !u!114 &1441284364 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 237938384658716432, guid: fa60fc546c392d340a4a96c3e17d3589, type: 3}
-  m_PrefabInstance: {fileID: 1791473868}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11d8ddde73c34fc41904feb6c4bc10c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
 --- !u!4 &1441284372 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8019130062199172194, guid: fa60fc546c392d340a4a96c3e17d3589, type: 3}
@@ -484,9 +473,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 127839591731294858, guid: fa60fc546c392d340a4a96c3e17d3589, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
+    - target: {fileID: 1586962891812536967, guid: fa60fc546c392d340a4a96c3e17d3589, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.181
       objectReference: {fileID: 0}
     - target: {fileID: 3345703262309095308, guid: fa60fc546c392d340a4a96c3e17d3589, type: 3}
       propertyPath: m_Name
@@ -499,14 +488,6 @@ PrefabInstance:
     - target: {fileID: 4461240762321927235, guid: fa60fc546c392d340a4a96c3e17d3589, type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4858960769095766467, guid: fa60fc546c392d340a4a96c3e17d3589, type: 3}
-      propertyPath: healthSystem
-      value: 
-      objectReference: {fileID: 1441284364}
-    - target: {fileID: 4858960769095766467, guid: fa60fc546c392d340a4a96c3e17d3589, type: 3}
-      propertyPath: worldBottomBoundary
-      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 5470966297801283803, guid: fa60fc546c392d340a4a96c3e17d3589, type: 3}
       propertyPath: m_AnchorMax.y
@@ -804,6 +785,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2928892178709476752, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3523145314362653839, guid: e695438e321d28a48a92625f6829735c, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -856,6 +841,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5053188984349645770, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5053188984349645770, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: playerLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 5053188984349645770, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: targetLayers.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 5053188984349645770, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: blockinglayers.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5528416832590366152, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: m_UseWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7173854873100013777, guid: e695438e321d28a48a92625f6829735c, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -867,6 +872,10 @@ PrefabInstance:
     - target: {fileID: 7961388190359316552, guid: e695438e321d28a48a92625f6829735c, type: 3}
       propertyPath: m_Name
       value: Stage 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9048965974961465915, guid: e695438e321d28a48a92625f6829735c, type: 3}
+      propertyPath: EnemyType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9173835080830314400, guid: e695438e321d28a48a92625f6829735c, type: 3}
       propertyPath: m_Layer
@@ -900,6 +909,10 @@ PrefabInstance:
     - target: {fileID: 389104741820004964, guid: 83b58dd415a1605469add8e6fd654247, type: 3}
       propertyPath: m_Name
       value: Stage 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7737152678544513619, guid: 83b58dd415a1605469add8e6fd654247, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7818670867573560688, guid: 83b58dd415a1605469add8e6fd654247, type: 3}
       propertyPath: m_LocalPosition.x
