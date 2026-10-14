@@ -199,7 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f767c16bccdf03347bf4a2ab1bb597f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  EnemyType: 0
+  EnemyType: 1
   attacks:
   - {fileID: 11400000, guid: 53db3035399e1ba469d7135ca5ce7bca, type: 2}
 --- !u!114 &8319220131307658606
@@ -214,6 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f894cc543106554299b7f8441f13573, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStateMachine
+  canJump: 0
   maxRoamingDistance: 5
   minimalDistanceRoamed: 2
   jumpHeightDifference: 3.5
@@ -305,7 +306,7 @@ Transform:
   m_GameObject: {fileID: 7981835959093352184}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.11, y: 0.74, z: 0}
+  m_LocalPosition: {x: 0.11, y: 0.36, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -434,9 +435,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlueLaserAttack
   slowAmount: 0
+  slowDuration: 0
   BeamMaxDistance: 0
   BeamDuration: 0
   lineRenderer: {fileID: 5868194396306020020}
+  blockinglayers:
+    serializedVersion: 2
+    m_Bits: 8
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &9099035518674404269
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e662efa5a67311647961cb9979ae6b63, type: 3}
   m_Name: BlueEnemyAttack
   m_EditorClassIdentifier: Assembly-CSharp::BlueEnemyAttack
-  cooldown: 1
+  cooldown: 5
   damage: 0
+  slowAmount: 0.25
+  slowDuration: 1
+  BeamMaxDistance: 4
+  BeamDuration: 4

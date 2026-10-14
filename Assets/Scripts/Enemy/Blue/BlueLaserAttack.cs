@@ -31,7 +31,9 @@ public class BlueLaserAttack : MonoBehaviour
     public void UpdateLaserDirection()
     {
 
-        laserDirection = transform.position + (Vector3.right * direction * BeamMaxDistance);
+        laserDirection = transform.localPosition + (Vector3.right * direction * BeamMaxDistance);
+        Debug.Log("Laser direction " + laserDirection);
+        Debug.Log("direction " + direction);
     }
 
     public void SpawnLaser()
@@ -62,21 +64,21 @@ public class BlueLaserAttack : MonoBehaviour
 
     public void CastRay()
     {
-        Vector2 direction = (laserDirection - transform.position).normalized;
-        RaycastHit2D blockingHit = Physics2D.Raycast(transform.position, direction, BeamMaxDistance, blockinglayers);
+        Vector2 direction = (laserDirection - transform.localPosition).normalized;
+        RaycastHit2D blockingHit = Physics2D.Raycast(transform.localPosition, direction, BeamMaxDistance, blockinglayers);
 
         if (blockingHit)
         {
-            UpdateLaserPosition(transform.position, blockingHit.point);
+            UpdateLaserPosition(transform.localPosition, blockingHit.point);
         }
         else
         {
-            UpdateLaserPosition(transform.position, laserDirection);
+            UpdateLaserPosition(transform.localPosition, laserDirection);
             Debug.Log("defaulting");
         }
         Vector2 laserEnd = blockingHit? blockingHit.point: laserDirection;
 
-        RaycastHit2D targetHit = Physics2D.Raycast(transform.position,direction,Vector2.Distance(transform.position, laserEnd), targetLayers);
+        RaycastHit2D targetHit = Physics2D.Raycast(transform.position, direction,Vector2.Distance(transform.position, laserEnd), targetLayers);
 
         if (targetHit)
         {
@@ -98,6 +100,6 @@ public class BlueLaserAttack : MonoBehaviour
     public void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, laserDirection);
+        Gizmos.DrawLine(transform.localPosition, laserDirection);
     }
 }
