@@ -4,9 +4,10 @@ public class Saw : MonoBehaviour
 {
     public int damage = 1;
     public int knockbackForce = 5;
-    public void SpawnSaw(Vector3 spawnLocation)
+    public Saw SpawnSaw(Vector3 spawnLocation)
     {
-        Instantiate(gameObject, spawnLocation, Quaternion.identity);
+       GameObject saw = Instantiate(gameObject, spawnLocation, Quaternion.identity);
+        return saw.GetComponent<Saw>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

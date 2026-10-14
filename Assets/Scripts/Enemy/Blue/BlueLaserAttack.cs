@@ -32,8 +32,6 @@ public class BlueLaserAttack : MonoBehaviour
     {
 
         laserDirection = transform.localPosition + (Vector3.right * direction * BeamMaxDistance);
-        Debug.Log("Laser direction " + laserDirection);
-        Debug.Log("direction " + direction);
     }
 
     public void SpawnLaser()
@@ -64,8 +62,8 @@ public class BlueLaserAttack : MonoBehaviour
 
     public void CastRay()
     {
-        Vector2 direction = (laserDirection - transform.localPosition).normalized;
-        RaycastHit2D blockingHit = Physics2D.Raycast(transform.localPosition, direction, BeamMaxDistance, blockinglayers);
+        Vector2 raydirection = (laserDirection - transform.localPosition).normalized;
+        RaycastHit2D blockingHit = Physics2D.Raycast(transform.localPosition, raydirection, BeamMaxDistance, blockinglayers);
 
         if (blockingHit)
         {
@@ -77,8 +75,9 @@ public class BlueLaserAttack : MonoBehaviour
             Debug.Log("defaulting");
         }
         Vector2 laserEnd = blockingHit? blockingHit.point: laserDirection;
+        Vector2 Rdirection = transform.right * direction;
 
-        RaycastHit2D targetHit = Physics2D.Raycast(transform.position, direction,Vector2.Distance(transform.position, laserEnd), targetLayers);
+        RaycastHit2D targetHit = Physics2D.Raycast(transform.position, Rdirection, Vector2.Distance(transform.position, laserEnd), targetLayers);
 
         if (targetHit)
         {
