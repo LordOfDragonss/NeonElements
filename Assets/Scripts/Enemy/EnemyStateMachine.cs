@@ -212,6 +212,7 @@ public class EnemyStateMachine : MonoBehaviour
         
         enemy.Attack();
 
+        if(enemy.CurrentAttack != null)
         enemyAttackTimer = enemy.CurrentAttack.Cooldown;
     }
 
