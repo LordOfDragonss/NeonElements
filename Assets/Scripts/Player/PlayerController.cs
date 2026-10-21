@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour,ISlowable
     public float lastDirection = 1f; // 1 = right, -1 = left
 
     // Status Effects
+    // CHARM
     private Coroutine charmRoutine;
     private Transform charmSource;
     private bool isCharmed;
@@ -106,9 +107,9 @@ public class PlayerController : MonoBehaviour,ISlowable
         }
     }
 
-    public void OnCharmed(Transform enemyPos, float charmDuration)
+    public void OnCharmed(Transform charmOrigin, float charmDuration)
     {
-        charmSource = enemyPos;
+        charmSource = charmOrigin;
 
         // Restart the timer if already charmed
         if (charmRoutine != null)

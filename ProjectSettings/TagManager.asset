@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Dummy
   - Terain
+  - Enemy
   layers:
   - Default
   - TransparentFX

@@ -24,7 +24,6 @@ public class EnemyStateMachine : MonoBehaviour
     private Enemy enemy;
     private EnemyMovement enemyMovement;
     private EnemyDetections enemyDetections;
-    private float enemyAttackTimer;
 
     private Transform player;
 
@@ -80,9 +79,6 @@ public class EnemyStateMachine : MonoBehaviour
                 Death();
                 break;
         }
-
-        if (enemyAttackTimer > 0f)
-            enemyAttackTimer -= Time.fixedDeltaTime;
     }
 
     private void Idle()
@@ -193,27 +189,13 @@ public class EnemyStateMachine : MonoBehaviour
     {
         enemyMovement.StopMoving();
 
-        if (!enemyDetections.playerInAttackRange && canChase)
+        if (!enemyDetections.playerInAttackRange)
         {
-            enemyState = EnemyState.Chasing;
-            return;
-        }
-        else if (!enemyDetections.playerInAttackRange && !canChase)
-        {
-            enemyState = EnemyState.Idle;
+            enemyState = canChase ? EnemyState.Chasing: EnemyState.Idle;
             return;
         }
 
-        // Doesnt work if enemy has multiple attacks: FIX MS
-        if (enemyAttackTimer > 0f)
-        {
-            return;
-        }
-        
-        enemy.Attack();
-
-        if(enemy.CurrentAttack != null)
-        enemyAttackTimer = enemy.CurrentAttack.Cooldown;
+        enemy.TryAttack();
     }
 
     private void Death()
