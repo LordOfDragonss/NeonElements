@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour,ISlowable
     public PlayerAttack playerAttack;
     public HealthSystem healthSystem;
 
+    public float lastDirection = 1f; // 1 = right, -1 = left
+
     // Status Effects
     private Coroutine charmRoutine;
     private Transform charmSource;
