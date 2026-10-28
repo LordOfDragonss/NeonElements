@@ -31,13 +31,11 @@ public class BlueLaserAttack : MonoBehaviour
     public void UpdateLaserDirection()
     {
 
-        laserDirection = transform.localPosition + (Vector3.right * direction * BeamMaxDistance);
+        laserDirection = transform.localPosition + (Vector3.right * BeamMaxDistance);
     }
 
     public void SpawnLaser()
     {
-        Debug.Log("FIRING MY LASOR!");
-
         if (!firing)
             StartCoroutine(Laser());
     }
@@ -72,12 +70,13 @@ public class BlueLaserAttack : MonoBehaviour
         else
         {
             UpdateLaserPosition(transform.localPosition, laserDirection);
-            Debug.Log("defaulting");
         }
         Vector2 laserEnd = blockingHit? blockingHit.point: laserDirection;
-        Vector2 Rdirection = transform.right * direction;
 
-        RaycastHit2D targetHit = Physics2D.Raycast(transform.position, Rdirection, Vector2.Distance(transform.position, laserEnd), targetLayers);
+        Vector3 slowRaydirection = transform.right * direction;
+        Debug.DrawLine(transform.position, transform.position +slowRaydirection);
+
+        RaycastHit2D targetHit = Physics2D.Raycast(transform.position, slowRaydirection, Vector2.Distance(transform.position, laserEnd), targetLayers);
 
         if (targetHit)
         {

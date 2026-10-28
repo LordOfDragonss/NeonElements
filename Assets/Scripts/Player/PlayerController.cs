@@ -44,8 +44,7 @@ public class PlayerController : MonoBehaviour,ISlowable
         }
         if (Sprite != null)
         {
-            float yRotation = lastDirection < 0 ? 180f : 0f;
-            Sprite.transform.rotation = Quaternion.Euler(Sprite.transform.rotation.x, yRotation, Sprite.transform.rotation.z);
+            Sprite.transform.localScale = new Vector3(lastDirection, 1, 1);
         }
         if (isOnGround())
         {
