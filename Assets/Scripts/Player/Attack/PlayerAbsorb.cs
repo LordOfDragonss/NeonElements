@@ -13,6 +13,8 @@ public class PlayerAbsorb : MonoBehaviour
     public bool Absorbing;
     public CustomTrigger AbsorbRangeTrigger;
 
+    public BlueLaserAttack BlueLaserAttack;
+
     public List<string> AbsorbaleTags;
     public float AbsorbDuration = 1f;
 
@@ -34,7 +36,7 @@ public class PlayerAbsorb : MonoBehaviour
             {
                 if (Collider.tag == tag)
                 {
-                    AbilityType newAbility = Collider.GetComponent<TestAbilityGiver>().EnemyType;
+                    AbilityType newAbility = Collider.GetComponent<Enemy>().EnemyType;
                     ChangeActiveAbility(newAbility);
                 }
             }
@@ -63,7 +65,7 @@ public class PlayerAbsorb : MonoBehaviour
             }
             else
             {
-               StartCoroutine(AbsorbAction());
+                StartCoroutine(AbsorbAction());
 
             }
         }
@@ -112,7 +114,9 @@ public class PlayerAbsorb : MonoBehaviour
                 break;
             case AbilityType.Blue:
                 Debug.Log("Blue Ability Called");
-                // Implement Blue ability action
+                if (BlueLaserAttack != null)
+                    BlueLaserAttack.SetDirection(GetComponent<PlayerController>().lastDirection);
+                BlueLaserAttack.SpawnLaser();
                 break;
             case AbilityType.Red:
                 Debug.Log("Red Ability Called");

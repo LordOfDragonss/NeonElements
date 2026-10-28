@@ -1,12 +1,15 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Windows;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour,ISlowable
 {
     public float Movementspeed;
+    private float currentSpeedMultiplier = 1f;
+    private Coroutine slowCoroutine;
     public float JumpForce;
     public float groundCheckDistance = 0.5f;
     public int ExtraJumpsRemaining;
@@ -19,7 +22,18 @@ public class PlayerController : MonoBehaviour
     public GameObject Sprite;
     public PlayerAttack playerAttack;
     public HealthSystem healthSystem;
-    float lastDirection = 1f; // 1 = right, -1 = left
+
+    public float lastDirection = 1f; // 1 = right, -1 = left
+
+    // Status Effects
+    // CHARM
+    private Coroutine charmRoutine;
+    private Transform charmSource;
+    private bool isCharmed;
+    [SerializeField] private float charmedSpeed = 1.5f;
+    [SerializeField] private float charmStopDistance = .5f;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,7 +43,16 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        rb.linearVelocity = (new Vector2(moveinput.x * Movementspeed, rb.linearVelocity.y));
+        if (isCharmed && charmSource != null) 
+        {
+            float xVelocity;
+            float dx = charmSource.position.x - transform.position.x;
+            xVelocity = Mathf.Abs(dx) > charmStopDistance ? Mathf.Sign(dx) * charmedSpeed : 0f;
+
+            rb.linearVelocity = new Vector2(xVelocity, rb.linearVelocity.y);
+        }
+        else rb.linearVelocity = (new Vector2(moveinput.x * Movementspeed * currentSpeedMultiplier, rb.linearVelocity.y));
+
         if (animator != null)
         {
             animator.SetBool("Walking", rb.linearVelocityX != 0);
@@ -75,13 +98,33 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump()
     {
-        if (ExtraJumpsRemaining > 0)
+        if (ExtraJumpsRemaining > 0 && !isCharmed)
         {
             ExtraJumpsRemaining--;
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, JumpForce);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, JumpForce * currentSpeedMultiplier);
             if (animator != null)
                 animator.SetTrigger("JumpTrigger");
         }
+    }
+
+    public void OnCharmed(Transform charmOrigin, float charmDuration)
+    {
+        charmSource = charmOrigin;
+
+        // Restart the timer if already charmed
+        if (charmRoutine != null)
+            StopCoroutine(charmRoutine);
+
+        charmRoutine = StartCoroutine(CharmRoutine(charmDuration));
+    }
+
+    private IEnumerator CharmRoutine(float duration)
+    {
+        isCharmed = true;
+        yield return new WaitForSeconds(duration);
+        isCharmed = false;
+        charmSource = null;
+        charmRoutine = null;
     }
 
     public bool isOnGround()
@@ -97,5 +140,23 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance);
         Gizmos.DrawLine(transform.position + new Vector3(0.5f, 0, 0), transform.position + new Vector3(0.5f, 0, 0) + Vector3.down * groundCheckDistance);
         Gizmos.DrawLine(transform.position + new Vector3(-0.5f, 0, 0), transform.position + new Vector3(-0.5f, 0, 0) + Vector3.down * groundCheckDistance);
+    }
+
+    public void ApplySlow(float amount, float duration)
+    {
+        if (slowCoroutine != null)
+            StopCoroutine(slowCoroutine);
+
+        slowCoroutine = StartCoroutine(Slow(amount, duration));
+    }
+
+    private IEnumerator Slow(float amount, float duration)
+    {
+        currentSpeedMultiplier = 1f - amount;
+
+        yield return new WaitForSeconds(duration);
+
+        currentSpeedMultiplier = 1f;
+        slowCoroutine = null;
     }
 }

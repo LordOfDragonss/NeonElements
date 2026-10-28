@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 7628224161725012009}
   m_Layer: 8
   m_Name: Succubes
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -282,7 +282,10 @@ MonoBehaviour:
   maxRoamingDistance: 5
   minimalDistanceRoamed: 2
   jumpHeightDifference: 3.5
-  enemyState: 0
+  enemyState: 1
+  startIdleState: 0
+  canChase: 1
+  canJump: 1
 --- !u!114 &514935968085347661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,8 +345,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f767c16bccdf03347bf4a2ab1bb597f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  attacks:
-  - {fileID: 11400000, guid: e3b2be624c98b8544a257610f17af20f, type: 2}
+  EnemyType: 4
+  Attacks:
+  - {fileID: 11400000, guid: 97f5ffc8370834849ba33db195d65520, type: 2}
 --- !u!1001 &3405224625300896152
 PrefabInstance:
   m_ObjectHideFlags: 0

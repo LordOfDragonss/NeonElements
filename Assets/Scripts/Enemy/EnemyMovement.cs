@@ -1,11 +1,15 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class EnemyMovement : MonoBehaviour
+public class EnemyMovement : MonoBehaviour, ISlowable
 {
     [SerializeField] private LayerMask floorLayers;
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float jumpForce = 10f;
+
+    private float currentSpeedMultiplier = 1f;
+    private Coroutine slowCoroutine;
 
     public bool isGrounded;
     public bool HasJumpFinished;
@@ -57,7 +61,7 @@ public class EnemyMovement : MonoBehaviour
 
         FaceDirection(direction);
 
-        rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(direction * moveSpeed * currentSpeedMultiplier, rb.linearVelocity.y);
     }
 
     public void StopMoving()
@@ -93,5 +97,23 @@ public class EnemyMovement : MonoBehaviour
         rb.AddForce(
             new Vector2(direction.x * jumpForce, jumpForce),
             ForceMode2D.Impulse);
+    }
+
+    public void ApplySlow(float amount, float duration)
+    {
+        if (slowCoroutine != null)
+            StopCoroutine(slowCoroutine);
+
+        slowCoroutine = StartCoroutine(Slow(amount, duration));
+    }
+
+    private IEnumerator Slow(float amount, float duration)
+    {
+        currentSpeedMultiplier = 1f - amount;
+
+        yield return new WaitForSeconds(duration);
+
+        currentSpeedMultiplier = 1f;
+        slowCoroutine = null;
     }
 }

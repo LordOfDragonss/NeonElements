@@ -4,10 +4,12 @@ public class EnemyStateMachine : MonoBehaviour
 {
     public enum EnemyState
     {
+        Idle,
         Roaming,
         Chasing,
         Jumping,
-        Attacking
+        Attacking,
+        Death
     }
 
     [Header("Roaming")]
@@ -22,7 +24,6 @@ public class EnemyStateMachine : MonoBehaviour
     private Enemy enemy;
     private EnemyMovement enemyMovement;
     private EnemyDetections enemyDetections;
-    private float enemyAttackTimer;
 
     private Transform player;
 
@@ -31,7 +32,9 @@ public class EnemyStateMachine : MonoBehaviour
 
     private bool jumpStarted = false;
 
-    
+    [SerializeField] private bool startIdleState;
+    [SerializeField] private bool canChase = true;
+    [SerializeField] private bool canJump;
 
     private void Awake()
     {
@@ -47,13 +50,19 @@ public class EnemyStateMachine : MonoBehaviour
         if (playerObject != null)
             player = playerObject.transform;
 
-        StartRoaming();
+        if (startIdleState)
+            enemyState = EnemyState.Idle;
+        else StartRoaming();
+
     }
 
     private void FixedUpdate()
     {
         switch (enemyState)
         {
+            case EnemyState.Idle:
+                Idle();
+                break;
             case EnemyState.Roaming:
                 Roaming();
                 break;
@@ -66,10 +75,24 @@ public class EnemyStateMachine : MonoBehaviour
             case EnemyState.Attacking:
                 Attacking();
                 break;
+            case EnemyState.Death:
+                Death();
+                break;
+        }
+    }
+
+    private void Idle()
+    {
+        if (enemyDetections.IsPlayerSeen() && canChase)
+        {
+            enemyState = EnemyState.Chasing;
         }
 
-        if (enemyAttackTimer > 0f)
-            enemyAttackTimer -= Time.fixedDeltaTime;
+        if (enemyDetections.playerInAttackRange)
+        {
+            enemyState = EnemyState.Attacking;
+            return;
+        }
     }
 
     private void Roaming()
@@ -97,9 +120,15 @@ public class EnemyStateMachine : MonoBehaviour
             return;
         }
 
-        if (!enemyDetections.playerInProximity && !enemyDetections.IsPlayerSeen())
+        if (!enemyDetections.playerInProximity && !enemyDetections.IsPlayerSeen() && !startIdleState)
         {
             StartRoaming();
+            return;
+        }
+
+        if (!enemyDetections.playerInProximity && !enemyDetections.IsPlayerSeen() && startIdleState)
+        {
+            enemyState = EnemyState.Idle;
             return;
         }
 
@@ -109,16 +138,20 @@ public class EnemyStateMachine : MonoBehaviour
             return;
         }
 
-        // Jumping logic
-        float yDifference = Mathf.Abs(player.position.y - transform.position.y);
-        bool needsJump = ((enemyMovement.isGrounded && yDifference > jumpHeightDifference) || !enemyDetections.IsGroundAhead()) && enemyMovement.jumpCooldown <= 0 && enemyMovement.HasJumpFinished;
-
-        if (needsJump)
+        if (canJump) 
         {
-            enemyState = EnemyState.Jumping;
-            return;
+            // Jumping logic
+            float yDifference = Mathf.Abs(player.position.y - transform.position.y);
+            bool needsJump = ((enemyMovement.isGrounded && yDifference > jumpHeightDifference) || !enemyDetections.IsGroundAhead()) && enemyMovement.jumpCooldown <= 0 && enemyMovement.HasJumpFinished;
+
+            if (needsJump)
+            {
+                enemyState = EnemyState.Jumping;
+                return;
+            }
         }
 
+        // Collision with wall makes Idle enemies that can chase get stuck against the wall and not chase (maybe let them follow the player with there eyes but not movement, then they can still turn around): FIX MS
         if (enemyDetections.IsGroundAhead() && !enemyDetections.EnemyCollidesWithEnemy() && !enemyDetections.EnemyCollidesWithWall())
             enemyMovement.MoveTo(player.position);
         else
@@ -158,18 +191,16 @@ public class EnemyStateMachine : MonoBehaviour
 
         if (!enemyDetections.playerInAttackRange)
         {
-            enemyState = EnemyState.Chasing;
+            enemyState = canChase ? EnemyState.Chasing: EnemyState.Idle;
             return;
         }
 
-        if (enemyAttackTimer > 0f)
-        {
-            return;
-        }
-        
-        enemy.Attack();
+        enemy.TryAttack();
+    }
 
-        enemyAttackTimer = enemy.CurrentAttack.Cooldown;
+    private void Death()
+    {
+
     }
 
     private void StartRoaming()

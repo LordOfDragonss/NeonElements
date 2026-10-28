@@ -2,21 +2,38 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private Attack[] attacks;
     private GameObject player;
 
-    public Attack CurrentAttack => attacks.Length > 0 ? attacks[Random.Range(0, attacks.Length)] : null;
+    public AbilityType EnemyType;
+    public Attack[] Attacks;
+    private float[] nextAttackTime;
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        nextAttackTime = new float[Attacks.Length];
     }
 
-    public void Attack()
+    public bool CanAttack()
     {
-        if (CurrentAttack != null)
+        for (int i = 0; i < Attacks.Length; i++)
+            if (Time.time >= nextAttackTime[i]) return true;
+        return false;
+    }
+
+    public bool TryAttack()
+    {
+        if (player == null || Attacks.Length == 0) return false;
+
+        for (int i = 0; i < Attacks.Length; i++)
         {
-            CurrentAttack.Execute(transform, player.transform);
+            if (Time.time < nextAttackTime[i]) continue;
+
+            Attacks[i].Execute(transform, player.transform);
+            nextAttackTime[i] = Time.time + Attacks[i].Cooldown;
+            return true;
         }
+
+        return false;
     }
 }
