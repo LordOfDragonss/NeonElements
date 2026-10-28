@@ -1,8 +1,12 @@
 using JetBrains.Annotations;
+using System.Collections;
 using UnityEngine;
 
-public class HammerController : MonoBehaviour
+public class HammerController : MonoBehaviour, ISlowable
 {
+    private Coroutine slowCoroutine;
+    private float originalspeed;
+    private bool isSlowed;
     public enum HitboxSwingingSides
     {
         Left,
@@ -27,7 +31,7 @@ public class HammerController : MonoBehaviour
 
     public void SetSwingAnimation()
     {
-        
+
         switch (hitboxSwingingSide)
         {
             case HitboxSwingingSides.Left:
@@ -45,6 +49,29 @@ public class HammerController : MonoBehaviour
                 break;
         }
         hammerAnimator.speed = swingSpeed;
+    }
+
+    public void ApplySlow(float amount, float duration)
+    {
+        if (slowCoroutine != null && isSlowed)
+            StopCoroutine(slowCoroutine);
+
+        slowCoroutine = StartCoroutine(Slow(amount, duration));
+    }
+
+    private IEnumerator Slow(float amount, float duration)
+    {
+        originalspeed = swingSpeed;
+        isSlowed = true;
+
+        hammerAnimator.speed = originalspeed * (1f - amount);
+
+        yield return new WaitForSeconds(duration);
+
+        hammerAnimator.speed = originalspeed;
+
+        isSlowed = false;
+        slowCoroutine = null;
     }
 
     //public void SetSwingAnimation()
