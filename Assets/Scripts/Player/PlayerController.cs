@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Windows;
 
-public class PlayerController : MonoBehaviour,ISlowable
+public class PlayerController : MonoBehaviour, ISlowable
 {
     public float Movementspeed;
     private float currentSpeedMultiplier = 1f;
@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour,ISlowable
     Rigidbody2D rb;
     Vector3 moveinput;
     public LayerMask floorLayers;
+    public LayerMask specialFloorLayers;
     public Animator animator;
     public GameObject Sprite;
     public PlayerAttack playerAttack;
@@ -31,9 +32,21 @@ public class PlayerController : MonoBehaviour,ISlowable
         ExtraJumpsRemaining = TotalExtraJumps;
     }
 
+
     private void Update()
     {
-        rb.linearVelocity = (new Vector2(moveinput.x * Movementspeed * currentSpeedMultiplier, rb.linearVelocity.y));
+        if (IsOnSpecialFloor())
+        {
+            if (moveinput.x != 0)
+            {
+                rb.linearVelocity = new Vector2( moveinput.x * Movementspeed * currentSpeedMultiplier,rb.linearVelocity.y
+                );
+            }
+        }
+        else
+        {
+            rb.linearVelocity = new Vector2(moveinput.x * Movementspeed * currentSpeedMultiplier, rb.linearVelocity.y);
+        }
         if (animator != null)
         {
             animator.SetBool("Walking", rb.linearVelocityX != 0);
@@ -52,7 +65,7 @@ public class PlayerController : MonoBehaviour,ISlowable
         }
         CheckBounds();
 
-        if(healthSystem.currentHealth == 0)//temp player death
+        if (healthSystem.currentHealth == 0)//temp player death
         {
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
@@ -60,7 +73,7 @@ public class PlayerController : MonoBehaviour,ISlowable
         }
     }
 
-    public void Knockback(float Force,Vector3 opposingForce)
+    public void Knockback(float Force, Vector3 opposingForce)
     {
         Vector2 direction = (transform.position - opposingForce).normalized;
         Vector2 knockbackForce = direction * Force;
@@ -100,6 +113,16 @@ public class PlayerController : MonoBehaviour,ISlowable
         return Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, floorLayers) ||
                Physics2D.Raycast(transform.position + new Vector3(0.5f, 0, 0), Vector2.down, groundCheckDistance, floorLayers) ||
                Physics2D.Raycast(transform.position + new Vector3(-0.5f, 0, 0), Vector2.down, groundCheckDistance, floorLayers);
+    }
+
+    private bool IsOnSpecialFloor()
+    {
+        return Physics2D.Raycast(
+            transform.position,
+            Vector2.down,
+            groundCheckDistance,
+            specialFloorLayers
+        );
     }
 
     private void OnDrawGizmosSelected()
