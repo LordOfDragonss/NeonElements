@@ -9,12 +9,24 @@ public class Lever : MonoBehaviour
 
     public UnityEvent onSwitch;
 
+    public float cooldowntime = 0.5f;
+    private float internalCooldown;
+
     public bool OneShot;
     private bool hasSwitched = false;
     public void SwitchLever()
     {
+        if (Time.time < internalCooldown)
+            return;
+
+        if (OneShot && hasSwitched)
+            return;
+        internalCooldown = Time.time + cooldowntime;
+
         animator.SetTrigger("FlipLever");
         onSwitch?.Invoke();
+
+
         if (OneShot)
         {
             hasSwitched = true;
