@@ -11,3 +11,9 @@ public enum AbilityType
     Yellow,
     Orange
 }
+
+public enum GunFireStyle
+{
+    Bullet,
+    Laser,
+}

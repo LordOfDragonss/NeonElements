@@ -3,6 +3,7 @@ using UnityEngine;
 public class CustomTrigger : MonoBehaviour
 {
     public System.Action<Collider2D> OnTriggerEnter;
+    public System.Action<Collider2D> OnTriggerStay;
     public System.Action<Collider2D> OnTriggerExit;
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -10,7 +11,7 @@ public class CustomTrigger : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        OnTriggerEnter?.Invoke(collision);
+        OnTriggerStay?.Invoke(collision);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
