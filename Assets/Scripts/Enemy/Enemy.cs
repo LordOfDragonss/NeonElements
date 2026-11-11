@@ -8,6 +8,8 @@ public class Enemy : MonoBehaviour
     public Attack[] Attacks;
     private float[] nextAttackTime;
 
+    public bool IsBusy { get; set; }
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -23,13 +25,13 @@ public class Enemy : MonoBehaviour
 
     public bool TryAttack()
     {
-        if (player == null || Attacks.Length == 0) return false;
+        if ((player == null || Attacks.Length == 0)) return false;
 
         for (int i = 0; i < Attacks.Length; i++)
         {
             if (Time.time < nextAttackTime[i]) continue;
 
-            Attacks[i].Execute(transform, player.transform);
+            Attacks[i].Execute(this, player.transform);
             nextAttackTime[i] = Time.time + Attacks[i].Cooldown;
             return true;
         }

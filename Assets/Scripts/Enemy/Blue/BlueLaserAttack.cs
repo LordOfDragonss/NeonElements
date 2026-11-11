@@ -32,8 +32,8 @@ public class BlueLaserAttack : MonoBehaviour
     {
 
         laserDirection = transform.localPosition + (Vector3.right * direction * BeamMaxDistance);
-        Debug.Log("Laser direction " + laserDirection);
-        Debug.Log("direction " + direction);
+        //Debug.Log("Laser direction " + laserDirection);
+        //Debug.Log("direction " + direction);
     }
 
     public void SpawnLaser()

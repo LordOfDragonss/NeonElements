@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyStateMachine : MonoBehaviour
@@ -12,18 +13,23 @@ public class EnemyStateMachine : MonoBehaviour
         Death
     }
 
+    [Header("Enemy States")]
+    public EnemyState enemyState;
+    [SerializeField] private bool startIdleState;
+    [SerializeField] private bool canChase = true;
+
     [Header("Roaming")]
     [SerializeField] private float maxRoamingDistance = 5f;
     [SerializeField] private float minimalDistanceRoamed = 2f;
 
     [Header("Jumping")]
     [SerializeField] private float jumpHeightDifference = 3.5f;
-
-    public EnemyState enemyState;
+    [SerializeField] private bool canJump;
 
     private Enemy enemy;
     private EnemyMovement enemyMovement;
     private EnemyDetections enemyDetections;
+    private HealthSystem healthSystem;
 
     private Transform player;
 
@@ -32,15 +38,12 @@ public class EnemyStateMachine : MonoBehaviour
 
     private bool jumpStarted = false;
 
-    [SerializeField] private bool startIdleState;
-    [SerializeField] private bool canChase = true;
-    [SerializeField] private bool canJump;
-
     private void Awake()
     {
         enemyMovement = GetComponent<EnemyMovement>();
         enemyDetections = GetComponent<EnemyDetections>();
         enemy = GetComponent<Enemy>();
+        healthSystem = GetComponent<HealthSystem>();
     }
 
     private void Start()
@@ -58,6 +61,9 @@ public class EnemyStateMachine : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Temp health check
+        if (healthSystem.currentHealth == 0)
+            enemyState = EnemyState.Death;
         switch (enemyState)
         {
             case EnemyState.Idle:
@@ -187,6 +193,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     private void Attacking()
     {
+        if (enemy.IsBusy) return;
         enemyMovement.StopMoving();
 
         if (!enemyDetections.playerInAttackRange)
@@ -200,7 +207,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     private void Death()
     {
-
+        Destroy(gameObject);   
     }
 
     private void StartRoaming()

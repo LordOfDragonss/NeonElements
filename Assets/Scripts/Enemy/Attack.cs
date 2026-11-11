@@ -8,5 +8,5 @@ public abstract class Attack : ScriptableObject
 
     public float Cooldown => cooldown;
 
-    public abstract void Execute(Transform transform, Transform playerTransform);
+    public abstract void Execute(Enemy enemy, Transform playerTransform);
 }

@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: 467441837157381200}
   - component: {fileID: 2957903991818930778}
   - component: {fileID: 3122493246103460906}
+  - component: {fileID: 8910310924863414387}
   m_Layer: 8
   m_Name: BasicEnemy
   m_TagString: Untagged
@@ -279,7 +280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   EnemyType: 0
-  attacks: []
+  Attacks: []
 --- !u!114 &467441837157381200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,12 +293,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f894cc543106554299b7f8441f13573, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStateMachine
-  maxRoamingDistance: 5
-  minimalDistanceRoamed: 2
-  jumpHeightDifference: 3.5
   enemyState: 1
   startIdleState: 0
   canChase: 1
+  maxRoamingDistance: 5
+  minimalDistanceRoamed: 2
+  jumpHeightDifference: 3.5
   canJump: 1
 --- !u!114 &2957903991818930778
 MonoBehaviour:
@@ -346,6 +347,20 @@ MonoBehaviour:
   isGrounded: 0
   HasJumpFinished: 0
   jumpCooldown: 0
+--- !u!114 &8910310924863414387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7454798585985321509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11d8ddde73c34fc41904feb6c4bc10c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
+  maxHealth: 6
+  currentHealth: 0
 --- !u!1001 &1890494857512479725
 PrefabInstance:
   m_ObjectHideFlags: 0

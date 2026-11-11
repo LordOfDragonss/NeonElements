@@ -8,13 +8,13 @@ public class BlueEnemyAttack : Attack
     public float BeamMaxDistance;
     public float BeamDuration;
 
-    public override void Execute(Transform transform, Transform playerTransform)
+    public override void Execute(Enemy enemy, Transform playerTransform)
     {
-        BlueLaserAttack laserAttack = transform.GetComponentInChildren<BlueLaserAttack>();
+        BlueLaserAttack laserAttack = enemy.transform.GetComponentInChildren<BlueLaserAttack>();
         if (laserAttack != null)
         {
             laserAttack.Setup(slowAmount, slowDuration, BeamMaxDistance, BeamDuration);
-            laserAttack.SetDirection(Mathf.Sign(transform.localScale.x));
+            laserAttack.SetDirection(Mathf.Sign(enemy.transform.localScale.x));
             laserAttack.SpawnLaser();
         }
     }

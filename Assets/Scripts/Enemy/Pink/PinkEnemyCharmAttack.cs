@@ -8,15 +8,15 @@ public class PinkEnemyCharmAttack : Attack
 
     private string enemyTag = "Enemy";
 
-    public override void Execute(Transform transform, Transform playerTransform)
+    public override void Execute(Enemy enemy, Transform playerTransform)
     {
         CharmProjectile projectile = 
             Instantiate(
                 projectilePrefab, 
-                transform.position + projectileSpawnOffset, 
+                enemy.transform.position + projectileSpawnOffset, 
                 Quaternion.identity
                 );
 
-        projectile.Initialize(transform, playerTransform, damage, enemyTag);
+        projectile.Initialize(enemy.transform, playerTransform, damage, enemyTag);
     }
 }
