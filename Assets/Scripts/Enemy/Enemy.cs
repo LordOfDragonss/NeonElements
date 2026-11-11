@@ -3,16 +3,26 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     private GameObject player;
+    public HealthSystem healthSystem;
+    public EnemyStateMachine stateMachine;
 
     public AbilityType EnemyType;
     public Attack[] Attacks;
     private float[] nextAttackTime;
 
     public bool IsBusy { get; set; }
+    public bool IsImmune { get; set; }
+    public bool IsAttackBlocked { get; set; }
+
+    private void Awake()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+        healthSystem = GetComponent<HealthSystem>();
+        stateMachine = GetComponent<EnemyStateMachine>();
+    }
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
         nextAttackTime = new float[Attacks.Length];
     }
 
@@ -37,5 +47,14 @@ public class Enemy : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void OnTakeDamage(int damage)
+    {
+        if (!IsImmune || !IsAttackBlocked)
+            healthSystem.TakeDamage(damage);
+
+        if (healthSystem.currentHealth <= 0)
+            stateMachine.enemyState = EnemyStateMachine.EnemyState.Death;
     }
 }
